@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
-import {StyleSheet, Text, View, TextInput, TouchableOpacity, Alert} from 'react-native'
+import {StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Platform} from 'react-native'
 import Colors from '../Constants/colors'
+import DeviceInfo from 'react-native-device-info'
+import axios from 'axios'
 
 const Login = props => {
     const [id, setId] = useState('') // State to manage user ID for authentication
@@ -11,9 +13,34 @@ const Login = props => {
         if(id === '' || password === ''){
             Alert.alert('Enter all details to sign in!')
         } else {
-            // TODO call API for auth
+            // TODO call API for 
+            axios(options)
+                .then(response => {
+                console.log(response.status)
+                })
         }
     }
+    const os = "API Level :" + DeviceInfo.getSystemVersion().toString() + ", Release: " + DeviceInfo.getBuildNumber().toString()
+    const options = {
+        url: '',
+        method: 'POST',
+        data: {
+            "user": id,
+            "password": password,
+            "device_type": Platform.OS,        // Android/iOS
+            "model": DeviceInfo.getDeviceName()
+                     .then(deviceName => {console.log("NAME", deviceName)}),              // getDeviceName
+            "os": os,                 // "API Level: " + Build.VERSION.SDK_INT(str) + ", Release: " + version.release 
+            //"size": ,               // screen size
+            //"resolution":           // screen density
+
+        }
+    }
+
+    console.log(options)
+    
+
+
 
     return (
         <View style={styles.container}>
